@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,35 +20,46 @@ namespace Geometry_Figures
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<GeometryFigure> geometryFigures;
+        private ObservableCollection<GeometryFigure> geometryFigures;
+        private bool isMouseDown;
+        private float deltaX;
+        private float deltaY;
+
         public MainWindow()
         {
             InitializeComponent();
-            geometryFigures = new List<GeometryFigure>();
+            geometryFigures = new ObservableCollection<GeometryFigure>();
+            isMouseDown = false;
 
-            GeometryFigure figure1 = new MyRectangle("text", 200, 200, MainPaintField, Colors.Yellow, true);
-            figure1.Draw();
-            GeometryFigure figure2 = new MyRectangle("text1", 200, 200, MainPaintField, Colors.Green, true);
-            figure2.Draw();
-            DataContext = figure1;
-            geometryFigures.AddRange(new List<GeometryFigure> { figure1, figure2 } );
+            DataContext = null;
 
-            figure1.Figure.PreviewMouseUp += (obj, arg) =>
+            this.MouseEnter += (enterObj, enterArg) =>
             {
-                DataContext = figure1;
+                if (enterArg.RightButton == MouseButtonState.Pressed || enterArg.LeftButton == MouseButtonState.Pressed)
+                {
+                    isMouseDown = true;
+                }
             };
-            figure2.Figure.PreviewMouseUp += (obj, arg) =>
+            this.MouseLeave += (leaveObj, leaveArg) =>
             {
-                DataContext = figure2;
+                isMouseDown = false;
             };
-
-            this.MouseWheel += (wheelObj, wheelArg) =>
+            this.PreviewMouseDown += (downObj, downArd) =>
+            {
+                isMouseDown = true;
+            };
+            this.PreviewMouseUp += (upObj, upArd) =>
+            {
+                isMouseDown = false;
+            };
+            this.PreviewMouseWheel += (wheelObj, wheelArg) =>
             {
                 float delta = 0;
                 if (wheelArg.Delta > 0)
                 {
                     delta = 0.1f;
-                } else if (wheelArg.Delta < 0)
+                }
+                else if (wheelArg.Delta < 0)
                 {
                     delta = -0.1f;
                 }
@@ -59,12 +70,158 @@ namespace Geometry_Figures
                     {
                         item.Scaling(delta);
                     }
-                } else
+
+                    if (SelectAllCheckBox.IsChecked == true)
+                    {
+                        TotalAreaTextBlock.Text = CalculcateTotalArea(geometryFigures).ToString();
+                    }
+                }
+                else
                 {
                     SelectAllCheckBox.IsChecked = false;
                     ((GeometryFigure)DataContext).Scaling(delta);
                 }
             };
+            this.PreviewMouseMove += (moveObj, moveArg) =>
+            {
+                if (!isMouseDown || SelectAllCheckBox.IsChecked == true)
+                {
+                    return;
+                }
+
+                if (DataContext != null)
+                {
+                    ((GeometryFigure)DataContext).Move(moveArg.GetPosition(MainPaintField));
+                }
+            };
+        }
+
+        private void DeleteFigureExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (DataContext != null)
+            {
+                MainPaintField.Children.Remove(((GeometryFigure)DataContext).Figure);
+                geometryFigures.Remove((GeometryFigure)DataContext);
+                DataContext = null;
+            }
+        }
+
+        private void AddFigureExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            AddFigureWindow addFigureWindow = new AddFigureWindow();
+            if (addFigureWindow.ShowDialog() == true)
+            {
+                addFigureWindow.Figure.Figure.PreviewMouseUp += (obj, arg) =>
+                {
+                    DataContext = addFigureWindow.Figure;
+                    MessageBox.Show("+");
+                };
+
+                addFigureWindow.Figure.MainField = MainPaintField;
+                MainPaintField.Children.Add(addFigureWindow.Figure.Figure);
+
+                geometryFigures.Add(addFigureWindow.Figure);
+                DataContext = addFigureWindow.Figure;
+            }
+        }
+
+        private void UpFigureExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SelectAllCheckBox.IsChecked == true)
+            {
+                DirectionButtonClick(UpButton, new RoutedEventArgs());
+            }
+        }
+
+        private void DownFigureExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SelectAllCheckBox.IsChecked == true)
+            {
+                DirectionButtonClick(DownButton, new RoutedEventArgs());
+            }
+        }
+
+        private void RightFigureExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SelectAllCheckBox.IsChecked == true)
+            {
+                DirectionButtonClick(RigthButton, new RoutedEventArgs());
+            }
+        }
+
+        private void LeftFigureExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (SelectAllCheckBox.IsChecked == true)
+            {
+                DirectionButtonClick(LeftButton, new RoutedEventArgs());
+            }
+        }
+
+        private void DirectionButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button) {
+                Button button = (Button)sender;
+
+                switch ((string)button.Tag)
+                {
+                    case "0":
+                        deltaY = -3;
+                        break;
+                    case "1":
+                        deltaY = 3;
+                        break;
+                    case "2":
+                        deltaX = -3;
+                        break;
+                    case "3":
+                        deltaX = 3;
+                        break;
+                    default:
+                        break;
+                }
+
+                foreach (GeometryFigure figure in geometryFigures)
+                {
+                    figure.Move(new Point(figure.CurrentPoint.X + deltaX, figure.CurrentPoint.Y + deltaY));
+                }
+
+                deltaY = 0;
+                deltaX = 0;
+            }
+        }
+
+        private void SelectAllClick(object sender, RoutedEventArgs e)
+        {
+            if (SelectAllCheckBox.IsChecked == true)
+            {
+                UpButton.Visibility = Visibility.Visible;
+                DownButton.Visibility = Visibility.Visible;
+                LeftButton.Visibility = Visibility.Visible;
+                RigthButton.Visibility = Visibility.Visible;
+
+                TotalAreaTextBlock.Text = CalculcateTotalArea(geometryFigures).ToString();
+            } 
+            else
+            {
+                UpButton.Visibility = Visibility.Hidden;
+                DownButton.Visibility = Visibility.Hidden;
+                LeftButton.Visibility = Visibility.Hidden;
+                RigthButton.Visibility = Visibility.Hidden;
+
+                TotalAreaTextBlock.Text = "-";
+            } 
+        }
+
+        private float CalculcateTotalArea(Collection<GeometryFigure> figures)
+        {
+            float totalArea = 0;
+
+            foreach (var figure in geometryFigures)
+            {
+                totalArea += figure.Area;
+            }
+
+            return totalArea;
         }
     }
 }

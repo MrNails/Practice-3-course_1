@@ -6,17 +6,29 @@
         xmlns:local="clr-namespace:Geometry_Figures"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:MyCommand.DeleteFigure" Executed="DeleteFigureExecute"/>
+        <CommandBinding Command="local:MyCommand.AddFigure" Executed="AddFigureExecute"/>
+        <CommandBinding Command="local:MyCommand.UpFigure" Executed="UpFigureExecute"/>
+        <CommandBinding Command="local:MyCommand.DownFigure" Executed="DownFigureExecute"/>
+        <CommandBinding Command="local:MyCommand.LeftFigure" Executed="LeftFigureExecute"/>
+        <CommandBinding Command="local:MyCommand.RightFigure" Executed="RightFigureExecute"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="Delete" Command="local:MyCommand.DeleteFigure"/>
+        <KeyBinding Key="Add" Command="local:MyCommand.AddFigure"/>
+        <KeyBinding Key="OemPlus" Command="local:MyCommand.AddFigure"/>
+        <KeyBinding Key="Up" Command="local:MyCommand.UpFigure"/>
+        <KeyBinding Key="Down" Command="local:MyCommand.DownFigure"/>
+        <KeyBinding Key="Left" Command="local:MyCommand.LeftFigure"/>
+        <KeyBinding Key="Right" Command="local:MyCommand.RightFigure"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="1.7*"/>
-        </Grid.RowDefinitions>
-        <Canvas x:Name="MainPaintField" Grid.RowSpan="2" Margin="0,20,0,0"/>
-        <Canvas x:Name="ExamplePhone" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="99" Height="210"/>
+        <Canvas x:Name="MainPaintField" Grid.RowSpan="2" Margin="0,20,0,0" />
         <WrapPanel Grid.Column="1" Margin="0,20,0,0">
             <TextBlock Text="Текущий выбранный объект: "/>
             <TextBlock Text="{Binding Name}" Margin="0 0 20 0"/>
@@ -24,14 +36,27 @@
             <TextBlock Text="{Binding Area}"/>
             <TextBlock Text="см квдр" Margin="5 0 40 0"/>
             <TextBlock Text="Общая площадь: "/>
-            <TextBlock x:Name="TotalAreaTextBlock" />
-            <CheckBox x:Name="SelectAllCheckBox" Content="Выбрать всё" Margin="75 40 75 0"/>
+            <TextBlock x:Name="TotalAreaTextBlock" Text="-"/>
+            <TextBlock Text="см квдр" Margin="5 0 40 0"/>
+            <CheckBox x:Name="SelectAllCheckBox" Content="Выбрать всё" Margin="75 40 75 0" Click="SelectAllClick"/>
+            <Button x:Name="UpButton" Content="Вверх" Margin="90 10 70 0" Width="50"
+                    Visibility="Hidden" Click="DirectionButtonClick" Tag="0" Command="local:MyCommand.UpFigure"/>
+            <Button x:Name="DownButton" Content="Вниз" Margin="90 10 0 0" Width="50" 
+                    Visibility="Hidden" Click="DirectionButtonClick" Tag="1" Command="local:MyCommand.DownFigure"/>
+            <Button x:Name="LeftButton" Content="В лево" Margin="-170 -20 0 0"  Width="50" Height="20" 
+                    Visibility="Hidden" Click="DirectionButtonClick" Tag="2" Command="local:MyCommand.LeftFigure"/>
+            <Button x:Name="RigthButton" Content="В право" Margin=" 10 -20 0 0" Width="50" Height="20" 
+                    Visibility="Hidden" Click="DirectionButtonClick" Tag="3" Command="local:MyCommand.RightFigure"/>
         </WrapPanel>
         <Menu Grid.Row="0" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Top">
             <MenuItem Header="Меню">
-                <MenuItem Header="Сохранить как картинку"  />
                 <MenuItem Header="Сохранить" />
                 <MenuItem Header="Загрузить" />
+            </MenuItem>
+            <MenuItem Header="Фигуры">
+                <MenuItem Header="Добавить фигуру" Command="local:MyCommand.AddFigure" InputGestureText="+"/>
+                <MenuItem Header="Удалить текущую" Command="local:MyCommand.DeleteFigure" InputGestureText="Del"/>
+                <MenuItem Header="Удалить все фигуры" />
             </MenuItem>
         </Menu>
     </Grid>

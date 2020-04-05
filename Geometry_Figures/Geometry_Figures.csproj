@@ -55,6 +55,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddFigureWindow.xaml.cs">
+      <DependentUpon>AddFigureWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Figure\2D Figure\SecondOrderCurve.cs" />
+    <Compile Include="Figure\2D Figure\Triangle.cs" />
+    <Compile Include="Figure\2D Figure\Quandrangle.cs" />
+    <Compile Include="WindowCommand.cs" />
+    <Page Include="AddFigureWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,8 +74,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GeometryFigure.cs" />
-    <Compile Include="GeometryFigures2D.cs" />
+    <Compile Include="Figure\3D Figure\Cilyndre.cs" />
+    <Compile Include="Figure\3D Figure\GeometrFigure3D.cs" />
+    <Compile Include="Figure\3D Figure\Pyramid.cs" />
+    <Compile Include="Figure\3D Figure\Sphere.cs" />
+    <Compile Include="Figure\GeometryFigure.cs" />
+    <Compile Include="Figure\2D Figure\GeometryFigure2D.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
