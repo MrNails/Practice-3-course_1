@@ -5,6 +5,7 @@ using System.Windows.Media;
 
 namespace Geometry_Figures
 {
+    [Serializable]
     public abstract class GeometryFigure3D : GeometryFigure
     {
         public GeometryFigure3D()

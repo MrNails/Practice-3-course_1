@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 
 namespace Geometry_Figures
 {
+    [Serializable]
     public class MySphere : GeometryFigure3D
     {
         private float radius;
@@ -36,11 +37,15 @@ namespace Geometry_Figures
                 if (value > 0)
                 {
                     radius = value;
+                    width = value * 2;
+                    height = value * 2;
                     OnPropertyChanged("Radius");
                 }
                 else
                 {
                     radius = 1;
+                    width = 1 * 2;
+                    height = 1 * 2;
                 }
             }
         }
@@ -94,16 +99,17 @@ namespace Geometry_Figures
             dashPath.StrokeThickness = 1;
             dashPath.StrokeDashArray = new DoubleCollection(new List<double> { 6, 6, 6, 6, 6, 6, 6 });
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
-            figure.Children.Add(trigger);
+            trigger.Opacity = 1;
+            trigger.Clip = new EllipseGeometry(new Point(Radius * Scale, Radius * Scale), Radius * Scale, Radius * Scale);
 
             figure.Children.Add(dashPath);
             figure.Children.Add(path);
             figure.Children.Add(trigger);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -113,10 +119,11 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
+                    ((Button)child).Clip = new EllipseGeometry(new Point(Radius * Scale, Radius * Scale), Radius * Scale, Radius * Scale);
                 }
 
                 if (child is Path)

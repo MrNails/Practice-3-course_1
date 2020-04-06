@@ -13,6 +13,7 @@ namespace Geometry_Figures
      * Коефициент 0.40 был взят как верхняя точка пирамиды на поле 100х100
      * Основа пирамиды - квадратная
      */
+    [Serializable]
     public class MyPyramid : GeometryFigure3D
     {
         private float bottomLine;
@@ -42,10 +43,12 @@ namespace Geometry_Figures
                 if (value > 0)
                 {
                     bottomLine = value;
+                    width = value / 0.65f;
                 }
                 else
                 {
                     bottomLine = 1;
+                    width = bottomLine / 0.65f;
                 }
                 OnPropertyChanged("Radius");
             }
@@ -108,15 +111,16 @@ namespace Geometry_Figures
             dashPath.StrokeThickness = 1;
             dashPath.StrokeDashArray = new DoubleCollection(new List<double> { 6, 6, 6, 6, 6, 6, 6 });
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
 
             figure.Children.Add(dashPath);
             figure.Children.Add(visiblePath);
             figure.Children.Add(trigger);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -126,10 +130,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)

@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 
 namespace Geometry_Figures
 {
+    [Serializable]
     public abstract class MyQuadrangles : GeometryFigure2D
     {
 
@@ -50,6 +51,7 @@ namespace Geometry_Figures
 
     }
 
+    [Serializable]
     public class MyRectangle : MyQuadrangles
     {
         public MyRectangle() : this(null, 50, 50, null, Colors.Black)
@@ -92,12 +94,13 @@ namespace Geometry_Figures
 
             figure.Children.Add(path);
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
             figure.Children.Add(trigger);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -107,10 +110,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
@@ -134,6 +137,7 @@ namespace Geometry_Figures
 
     }
 
+    [Serializable]
     public class MyRhombus : MyQuadrangles
     {
         public MyRhombus() : this(null, 50, 50, null, Colors.Black)
@@ -186,14 +190,15 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
             figure.Children.Add(trigger);
 
             figure.Children.Add(path);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -203,10 +208,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
@@ -234,6 +239,7 @@ namespace Geometry_Figures
         }
     }
 
+    [Serializable]
     public class MyTrapeze : MyQuadrangles
     {
         private float topLineWidth;
@@ -308,14 +314,15 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
             figure.Children.Add(trigger);
 
             figure.Children.Add(path);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -325,10 +332,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)

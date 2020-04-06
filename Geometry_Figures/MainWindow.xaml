@@ -31,13 +31,34 @@
         <Canvas x:Name="MainPaintField" Grid.RowSpan="2" Margin="0,20,0,0" />
         <WrapPanel Grid.Column="1" Margin="0,20,0,0">
             <TextBlock Text="Текущий выбранный объект: "/>
-            <TextBlock Text="{Binding Name}" Margin="0 0 20 0"/>
+            <TextBlock Text="{Binding Name}" Width="80"/>
             <TextBlock Text="Его площадь: "/>
             <TextBlock Text="{Binding Area}"/>
             <TextBlock Text="см квдр" Margin="5 0 40 0"/>
             <TextBlock Text="Общая площадь: "/>
             <TextBlock x:Name="TotalAreaTextBlock" Text="-"/>
             <TextBlock Text="см квдр" Margin="5 0 40 0"/>
+            <TextBlock x:Name="DebugBlock"/>
+            <TextBlock Text="Длина основы фигуры" Margin="0 10 20 0"/>
+            <TextBox   Width="90" Margin="0 10 0 0">
+                <TextBox.Text>
+                    <Binding Path="FigureOriginalBaseWidth" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Text="Ширина основы фигуры" Margin="0 10 10 0"/>
+            <TextBox   Width="90" Margin="0 10 0 0">
+                <TextBox.Text>
+                    <Binding Path="FigureOriginalBaseHeight" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <CheckBox x:Name="SelectAllCheckBox" Content="Выбрать всё" Margin="75 40 75 0" Click="SelectAllClick"/>
             <Button x:Name="UpButton" Content="Вверх" Margin="90 10 70 0" Width="50"
                     Visibility="Hidden" Click="DirectionButtonClick" Tag="0" Command="local:MyCommand.UpFigure"/>
@@ -50,13 +71,12 @@
         </WrapPanel>
         <Menu Grid.Row="0" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Top">
             <MenuItem Header="Меню">
-                <MenuItem Header="Сохранить" />
-                <MenuItem Header="Загрузить" />
+                <MenuItem Header="Сохранить" Click="SaveClick"/>
+                <MenuItem Header="Загрузить" Click="LoadClick"/>
             </MenuItem>
             <MenuItem Header="Фигуры">
                 <MenuItem Header="Добавить фигуру" Command="local:MyCommand.AddFigure" InputGestureText="+"/>
                 <MenuItem Header="Удалить текущую" Command="local:MyCommand.DeleteFigure" InputGestureText="Del"/>
-                <MenuItem Header="Удалить все фигуры" />
             </MenuItem>
         </Menu>
     </Grid>

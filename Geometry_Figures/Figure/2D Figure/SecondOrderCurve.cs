@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 
 namespace Geometry_Figures
 {
+    [Serializable]
     public abstract class MySecondOrderCurves : GeometryFigure2D
     {
         private float radiusX;
@@ -37,12 +38,14 @@ namespace Geometry_Figures
             {
                 if (value > 0)
                 {
+                    width = value * 2;
                     radiusX = value;
                     OnPropertyChanged("RadiusX");
                 }
                 else
                 {
                     radiusX = 1;
+                    width = 1 * 2;
                 }
             }
         }
@@ -53,18 +56,21 @@ namespace Geometry_Figures
             {
                 if (value > 0)
                 {
+                    height = value * 2;
                     radiusY = value;
                     OnPropertyChanged("RadiusY");
                 }
                 else
                 {
                     radiusY = 1;
+                    height = 1 * 2;
                 }
             }
         }
 
     }
 
+    [Serializable]
     public class MyCircle : MySecondOrderCurves
     {
         public MyCircle() : this(null, 5, null, Colors.Black)
@@ -103,14 +109,16 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
-            figure.Children.Add(trigger);
+            trigger.Opacity = 0;
 
             figure.Children.Add(path);
 
-            MainField.Children.Add(figure);
+            figure.Children.Add(trigger);
+
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -120,10 +128,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
@@ -134,9 +142,9 @@ namespace Geometry_Figures
                     path.Width = width * Scale;
                     path.Height = height * Scale;
 
-                    ellipse.Center = new Point(RadiusX * Scale, RadiusY * Scale);
-                    ellipse.RadiusX = RadiusX * Scale;
-                    ellipse.RadiusY = RadiusY * Scale;
+                    ellipse.Center = new Point(width / 2 * Scale, height / 2 * Scale);
+                    ellipse.RadiusX = width / 2 * Scale;
+                    ellipse.RadiusY = height / 2 * Scale;
 
                 }
             }
@@ -145,6 +153,7 @@ namespace Geometry_Figures
         }
     }
 
+    [Serializable]
     public class MyEllipse : MySecondOrderCurves
     {
         public MyEllipse() : this(null, 5, 5, null, Colors.Black)
@@ -183,14 +192,15 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
-            figure.Children.Add(trigger);
+            trigger.Opacity = 0;
 
             figure.Children.Add(path);
+            figure.Children.Add(trigger);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -200,10 +210,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
@@ -214,9 +224,9 @@ namespace Geometry_Figures
                     path.Width = width * Scale;
                     path.Height = height * Scale;
 
-                    ellipse.Center = new Point(RadiusX * Scale, RadiusY * Scale);
-                    ellipse.RadiusX = RadiusX * Scale;
-                    ellipse.RadiusY = RadiusY * Scale;
+                    ellipse.Center = new Point(width / 2 * Scale, height / 2 * Scale);
+                    ellipse.RadiusX = width / 2 * Scale;
+                    ellipse.RadiusY = height / 2 * Scale;
 
                 }
             }

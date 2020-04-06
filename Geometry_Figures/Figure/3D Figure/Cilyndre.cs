@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 
 namespace Geometry_Figures
 {
+    [Serializable]
     public class MyCilyndre : GeometryFigure3D
     {
         private float radius;
@@ -35,9 +36,11 @@ namespace Geometry_Figures
                 if (value > 0)
                 {
                     radius = value;
+                    width = value * 2;
                 } else
                 {
                     radius = 1;
+                    width = 1 * 2;
                 }
                 OnPropertyChanged("Radius");
             }
@@ -51,10 +54,6 @@ namespace Geometry_Figures
                 {
                     height = value;
                     OnPropertyChanged("Height");
-                }
-                else
-                {
-                    throw new ArgumentException("Не правильная высота");
                 }
             }
         }
@@ -109,15 +108,16 @@ namespace Geometry_Figures
             dashPath.StrokeThickness = 1;
             dashPath.StrokeDashArray = new DoubleCollection(new List<double> { 6, 6, 6, 6, 6, 6, 6 });
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
 
             figure.Children.Add(dashPath);
             figure.Children.Add(path);
             figure.Children.Add(trigger);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -127,16 +127,16 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
                 {
                     Path path = (Path)child;
-                    path.Width = Radius * 2 * Scale;
+                    path.Width = width * Scale;
                     path.Height = Height * Scale;
 
                     if (path.Data is GeometryGroup)
@@ -147,20 +147,20 @@ namespace Geometry_Figures
                         LineGeometry rightLine = (LineGeometry)geometryGroup.Children[2];
                         LineGeometry leftLine = (LineGeometry)geometryGroup.Children[3];
 
-                        Point startArcPoint = new Point(0, Height * Scale - Radius * Scale * 0.5);
-                        Point endArcPoint = new Point(Radius * 2 * Scale, Height * Scale - Radius * Scale * 0.5);
-                        Point centerEllipsePoint = new Point(Radius * Scale, Radius * Scale * 0.5);
-                        Point startRightLinePoint = new Point(0, Radius * Scale * 0.5);
-                        Point endRightLinePoint = new Point(0, Height * Scale - Radius * Scale * 0.5);
-                        Point startLeftLinePoint = new Point(Radius * 2 * Scale, Radius * Scale * 0.5);
-                        Point endLeftLinePoint = new Point(Radius * 2 * Scale, Height * Scale - Radius * Scale * 0.5);
+                        Point startArcPoint = new Point(0, Height * Scale - width / 2 * Scale * 0.5);
+                        Point endArcPoint = new Point(width * Scale, Height * Scale - width / 2 * Scale * 0.5);
+                        Point centerEllipsePoint = new Point(width / 2 * Scale, width / 2 * Scale * 0.5);
+                        Point startRightLinePoint = new Point(0, width / 2 * Scale * 0.5);
+                        Point endRightLinePoint = new Point(0, Height * Scale - width / 2 * Scale * 0.5);
+                        Point startLeftLinePoint = new Point(width * Scale, width / 2 * Scale * 0.5);
+                        Point endLeftLinePoint = new Point(width * Scale, Height * Scale - width / 2 * Scale * 0.5);
 
                         pathGeometry.Figures[0].StartPoint = startArcPoint;
                         ((ArcSegment)pathGeometry.Figures[0].Segments[0]).Point = endArcPoint;
 
                         ellipse.Center = centerEllipsePoint;
-                        ellipse.RadiusX = Radius * Scale;
-                        ellipse.RadiusY = Radius * Scale * 0.5;
+                        ellipse.RadiusX = width / 2 * Scale;
+                        ellipse.RadiusY = width / 2 * Scale * 0.5;
 
                         rightLine.StartPoint = startRightLinePoint;
                         rightLine.EndPoint = endRightLinePoint;
@@ -171,8 +171,8 @@ namespace Geometry_Figures
                     {
                         PathGeometry pathGeometry = (PathGeometry)path.Data;
 
-                        Point startArcPoint = new Point(0, Height * Scale - Radius * Scale * 0.5);
-                        Point endArcPoint = new Point(Radius * 2 * Scale, Height * Scale - Radius * Scale * 0.5);
+                        Point startArcPoint = new Point(0, Height * Scale - width / 2 * Scale * 0.5);
+                        Point endArcPoint = new Point(width * Scale, Height * Scale - width / 2 * Scale * 0.5);
 
                         pathGeometry.Figures[0].StartPoint = startArcPoint;
                         ((ArcSegment)pathGeometry.Figures[0].Segments[0]).Point = endArcPoint;

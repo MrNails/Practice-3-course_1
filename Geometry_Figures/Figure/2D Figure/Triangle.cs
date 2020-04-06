@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace Geometry_Figures
 {
@@ -12,6 +13,7 @@ namespace Geometry_Figures
      * SecondSide - основа
      * ThirdSide - правая сторона
      */
+    [Serializable]
     public abstract class MyTriangle : GeometryFigure2D
     {
         private float firstSide;
@@ -59,10 +61,6 @@ namespace Geometry_Figures
                     firstSide = value;
                     OnPropertyChanged("FirstSide");
                 } 
-                else
-                {
-                    throw new ArgumentException("Не правильный ввод первой стороны");
-                }
 
             }
         }
@@ -74,11 +72,8 @@ namespace Geometry_Figures
                 if (value > 0)
                 {
                     secondSide = value;
+                    width = value;
                     OnPropertyChanged("SecondSide");
-                }
-                else
-                {
-                    throw new ArgumentException("Не правильный ввод второй стороны");
                 }
 
             }
@@ -93,13 +88,11 @@ namespace Geometry_Figures
                     thirdSide = value;
                     OnPropertyChanged("ThirdSide");
                 }
-                else
-                {
-                    throw new ArgumentException("Не правильный ввод третьей стороны");
-                }
 
             }
         }
+
+        [XmlIgnore]
         public float Height
         {
             get { return height; }
@@ -110,15 +103,12 @@ namespace Geometry_Figures
                     height = value;
                     OnPropertyChanged("Height");
                 }
-                else
-                {
-                    throw new ArgumentException("Невозможно посчитать высоту");
-                }
 
             }
         }
     }
 
+    [Serializable]
     public class MyEquilateralTriangle : MyTriangle
     {
         public MyEquilateralTriangle() : this(null, 40, null, Colors.Black)
@@ -167,14 +157,16 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
+
             figure.Children.Add(trigger);
 
             figure.Children.Add(path);
 
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -184,10 +176,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
@@ -213,6 +205,7 @@ namespace Geometry_Figures
         }
     }
 
+    [Serializable]
     public class MyRightTriangle : MyTriangle
     {
         public MyRightTriangle() : this(null, 40, 40, 40, null, Colors.Black)
@@ -259,14 +252,15 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
             figure.Children.Add(trigger);
 
             figure.Children.Add(path);
             
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -276,10 +270,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)
@@ -305,6 +299,7 @@ namespace Geometry_Figures
         }
     }
 
+    [Serializable]
     public class MyIsoscelesTriangle : MyTriangle
     {
         public MyIsoscelesTriangle() : this(null, 40, 40, null, Colors.Black)
@@ -341,6 +336,7 @@ namespace Geometry_Figures
 
             pathGeometry.Figures.Add(triangle);
 
+            
             path.Data = pathGeometry;
             path.Width = SecondSide * Scale;
             path.Height = Height * Scale;
@@ -353,14 +349,15 @@ namespace Geometry_Figures
                 path.Fill = new SolidColorBrush(PenColor);
             }
 
-            TextBlock trigger = new TextBlock();
+            Button trigger = new Button();
             trigger.Width = width * Scale;
             trigger.Height = height * Scale;
+            trigger.Opacity = 0;
             figure.Children.Add(trigger);
 
             figure.Children.Add(path);
             
-            MainField.Children.Add(figure);
+            MainField?.Children.Add(figure);
 
             isDrawed = true;
         }
@@ -370,10 +367,10 @@ namespace Geometry_Figures
 
             foreach (var child in figure.Children)
             {
-                if (child is TextBlock)
+                if (child is Button)
                 {
-                    ((TextBlock)child).Width = width * Scale;
-                    ((TextBlock)child).Height = height * Scale;
+                    ((Button)child).Width = width * Scale;
+                    ((Button)child).Height = height * Scale;
                 }
 
                 if (child is Path)

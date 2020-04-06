@@ -109,7 +109,7 @@ namespace Geometry_Figures
                     FillCheckBox.IsEnabled = true;
                     TextBlock1.Text = "Левая сторона";
                     TextBlock2.Text = "Основа";
-                    Figure = new MyIsoscelesTriangle("Прямоугольный треугольник", firstParam, secondParam, ExampleCanvas, PenColor, isFilled: fill);
+                    Figure = new MyRightTriangle("Прямоугольный треугольник", firstParam, secondParam, thirdParam, ExampleCanvas, PenColor, isFilled: fill);
                     break;
                 case "Круг":
                     FillCheckBox.IsEnabled = true;
@@ -138,6 +138,8 @@ namespace Geometry_Figures
                             break;
                         case "Сфера":
                             TextBlock1.Text = "Радиус";
+                            TextBlock2.IsEnabled = false;
+                            TextBox2.IsEnabled = false;
                             Figure = new MySphere("Сфера", firstParam, ExampleCanvas, PenColor);
                             break;
                         default:

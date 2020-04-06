@@ -4,14 +4,35 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Geometry_Figures
 {
+    [Serializable]
+    [XmlInclude(typeof(GeometryFigure2D))]
+    [XmlInclude(typeof(GeometryFigure3D))]
+    [XmlInclude(typeof(MyQuadrangles))]
+    [XmlInclude(typeof(MyTriangle))]
+    [XmlInclude(typeof(MySecondOrderCurves))]
+    [XmlInclude(typeof(MySphere))]
+    [XmlInclude(typeof(MyPyramid))]
+    [XmlInclude(typeof(MyCilyndre))]
+    [XmlInclude(typeof(MyIsoscelesTriangle))]
+    [XmlInclude(typeof(MyEquilateralTriangle))]
+    [XmlInclude(typeof(MyEllipse))]
+    [XmlInclude(typeof(MyCircle))]
+    [XmlInclude(typeof(MyRightTriangle))]
+    [XmlInclude(typeof(MyEquilateralTriangle))]
+    [XmlInclude(typeof(MyRhombus))]
+    [XmlInclude(typeof(MyRectangle))]
+    [XmlInclude(typeof(MyTrapeze))]
     public abstract class GeometryFigure : INotifyPropertyChanged
     {
         private float scale;
         private Point currentPoint;
 
+        [XmlIgnore]
+        [NonSerialized]
         protected Canvas figure;
         protected float width;
         protected float height;
@@ -37,10 +58,31 @@ namespace Geometry_Figures
         }
 
         public Canvas Figure { get { return figure; } }
-        public Point CurrentPoint { get { return currentPoint; } }
-        public bool IsFilled { get { return isFilled; } }
+        public Point CurrentPoint { 
+            get { return currentPoint; }
+            set
+            {
+                currentPoint = value;
+
+                Canvas.SetTop(figure, value.Y);
+                Canvas.SetLeft(figure, value.X);
+            }
+        }
+        public bool IsFilled {
+            get { return isFilled; } 
+            set
+            {
+                if (!isDrawed) 
+                {
+                    isFilled = true;
+                }
+            } 
+        }
 
         public string Name { get; set; }
+
+        [XmlIgnore]
+        [field: NonSerialized]
         public Canvas MainField { get; set; }
         public Color PenColor { get; set; }
 
@@ -60,9 +102,46 @@ namespace Geometry_Figures
                 OnPropertyChanged("Scale");
             }
         }
+        public float FigureOriginalBaseWidth
+        {
+            get { return width; }
+            set
+            {
+                if (value > 0)
+                {
+                    width = value;
+
+                }
+                else
+                {
+                    width = 1f;
+                }
+                Scaling(0);
+                OnPropertyChanged("FigureOriginalBaseWidth");
+            }
+        }
+        public float FigureOriginalBaseHeight
+        {
+            get { return height; }
+            set
+            {
+                if (value > 0)
+                {
+                    height = value;
+                }
+                else
+                {
+                    height = 1f;
+                }
+                Scaling(0);
+                OnPropertyChanged("FigureOriginalBaseHeight");
+            }
+        }
 
         public abstract float Area { get; }
 
+        [field: XmlIgnore]
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
         public abstract void Draw();
@@ -70,7 +149,6 @@ namespace Geometry_Figures
         public virtual void Scaling(float delta)
         {
             Scale += delta;
-
             figure.Width = width * Scale;
             figure.Height = height * Scale;
         }
@@ -78,32 +156,6 @@ namespace Geometry_Figures
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-        public void Move(Point newPoint)
-        {
-
-            if (newPoint.Y < 0)
-            {
-                newPoint.Y = 0;
-            }
-            else if (newPoint.Y + height > MainField.ActualHeight)
-            {
-                newPoint.Y = MainField.ActualHeight - height;
-            }
-
-            if (newPoint.X < 0)
-            {
-                newPoint.X = 0;
-            }
-            else if (newPoint.X + width > MainField.ActualWidth)
-            {
-                newPoint.X = MainField.ActualWidth - width;
-            }
-
-            currentPoint = newPoint;
-
-            Canvas.SetTop(figure, newPoint.Y);
-            Canvas.SetLeft(figure, newPoint.X);
         }
     }
 }
